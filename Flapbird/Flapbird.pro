@@ -4,4 +4,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp
+        fase1.cpp \
+        loadobj.cpp \
+        main.cpp \
+        models.cpp
+
+HEADERS += \
+    fase1.h \
+    loadobj.h \
+    models.h

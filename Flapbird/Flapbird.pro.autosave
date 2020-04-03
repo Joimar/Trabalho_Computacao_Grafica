@@ -1,0 +1,17 @@
+QT +=
+
+TARGET = Flapbird
+
+TEMPLATE = app
+
+
+
+unix {
+
+    LIBS += /usr/lib/x86_64-linux-gnu/libglut.so -lGL -lGLU
+}
+
+SOURCES += \
+    main.cpp
+
+HEADERS +=
