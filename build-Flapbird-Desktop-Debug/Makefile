@@ -40,7 +40,7 @@ DISTNAME      = Flapbird1.0.0
 DISTDIR = /home/joi/Área\ de\ Trabalho/Computação\ Gráfica/Atividades/Trabalho_Computacao_Grafica/build-Flapbird-Desktop-Debug/.tmp/Flapbird1.0.0
 LINK          = g++
 LFLAGS        = 
-LIBS          = $(SUBLIBS)    
+LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libglut.so -lGL -lGLU -lglfw   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -52,8 +52,14 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Flapbird/main.cpp 
-OBJECTS       = main.o
+SOURCES       = ../Flapbird/fase1.cpp \
+		../Flapbird/loadobj.cpp \
+		../Flapbird/main.cpp \
+		../Flapbird/models.cpp 
+OBJECTS       = fase1.o \
+		loadobj.o \
+		main.o \
+		models.o
 DIST          = /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/common/unix.conf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/common/linux.conf \
@@ -207,6 +213,7 @@ DIST          = /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qt_config.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_post.prf \
+		../Flapbird/.qmake.stash \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/toolchain.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/default_pre.prf \
@@ -220,7 +227,12 @@ DIST          = /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/exceptions.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/yacc.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/lex.prf \
-		../Flapbird/Flapbird.pro  ../Flapbird/main.cpp
+		../Flapbird/Flapbird.pro fase1.h \
+		loadobj.h \
+		models.h ../Flapbird/fase1.cpp \
+		../Flapbird/loadobj.cpp \
+		../Flapbird/main.cpp \
+		../Flapbird/models.cpp
 QMAKE_TARGET  = Flapbird
 DESTDIR       = 
 TARGET        = Flapbird
@@ -385,6 +397,7 @@ Makefile: ../Flapbird/Flapbird.pro /home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++/
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qt_config.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/toolchain.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/default_pre.prf \
@@ -553,6 +566,7 @@ Makefile: ../Flapbird/Flapbird.pro /home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++/
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qt_config.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/toolchain.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/default_pre.prf:
@@ -610,8 +624,17 @@ compiler_clean:
 
 ####### Compile
 
+fase1.o: ../Flapbird/fase1.cpp ../Flapbird/fase1.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fase1.o ../Flapbird/fase1.cpp
+
+loadobj.o: ../Flapbird/loadobj.cpp ../Flapbird/loadobj.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loadobj.o ../Flapbird/loadobj.cpp
+
 main.o: ../Flapbird/main.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Flapbird/main.cpp
+
+models.o: ../Flapbird/models.cpp ../Flapbird/models.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o models.o ../Flapbird/models.cpp
 
 ####### Install
 

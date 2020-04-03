@@ -1,3 +1,6 @@
+QT += opengl
+
+TARGET = Flapbird
 TEMPLATE = app
 CONFIG += console c++11
 CONFIG -= app_bundle
@@ -13,3 +16,9 @@ HEADERS += \
     fase1.h \
     loadobj.h \
     models.h
+
+    LIBS += /usr/lib/x86_64-linux-gnu/libglut.so \
+        -lGL \
+        -lGLU \
+        -lglfw
+
