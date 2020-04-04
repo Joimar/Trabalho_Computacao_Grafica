@@ -10,15 +10,17 @@ class Models
 public:
     Models();
 
-protected:
+//protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+    void babaca();
+    void drawCube();
     //void keyPressEvent(QKeyEvent *event);
     //void changeEvent(QEvent *event);
 
 private:
-      void drawCube();
+
 };
 
 #endif // MODELS_H

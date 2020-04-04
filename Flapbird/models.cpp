@@ -11,9 +11,9 @@ Models::Models()
 
 }
 
+void babaca(){}
 
-
-void drawCube() {
+void Models::drawCube() {
     //qglColor(Qt::white);
     //glColor3f(1.0f,1.0f,0.0f);
 glClearColor (0.0f, 0.0f, 0.0f, 1.0f);

@@ -630,7 +630,7 @@ fase1.o: ../Flapbird/fase1.cpp ../Flapbird/fase1.h
 loadobj.o: ../Flapbird/loadobj.cpp ../Flapbird/loadobj.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loadobj.o ../Flapbird/loadobj.cpp
 
-main.o: ../Flapbird/main.cpp 
+main.o: ../Flapbird/main.cpp ../Flapbird/models.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Flapbird/main.cpp
 
 models.o: ../Flapbird/models.cpp ../Flapbird/models.h
