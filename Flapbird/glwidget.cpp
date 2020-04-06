@@ -26,6 +26,7 @@ GLWidget::GLWidget() {
     changeAmount = 0;
     xrot = yrot = xspeed = yspeed = 0.0f;
     z = -5.0f;
+   ytran = 0.0f;
 }
 
 // Destructor
@@ -159,6 +160,8 @@ void GLWidget::drawCube() {
         glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f); // Bottom Right Of The Texture and Quad
         glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f); // Top Right Of The Texture and Quad
         glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f); // Top Left Of The Texture and Quad
+
+
     glEnd();
 
     //parede frontal
@@ -264,16 +267,21 @@ void GLWidget::paintGL() {
 
     // Draw cube
     glLoadIdentity(); // Reset current modelview matrix
-    glTranslatef(0.0f, 0.0f, z); // Move into the screen
+    //glTranslatef(0.0f, 0.0f, z); // Move into the screen faz a camera ficar fora e não dentro do objeto
+    //glTranslatef(0.0f, 0.0f, -10.0f); // Move into the screen faz a camera ficar fora e não dentro do objeto
+    glTranslatef(ytran, 0.0f, -10.0f); // ytran faz ele andar para a direita
     glRotatef(xrot, 1.0f, 0.0f, 0.0f); // Rotate on X-axis
     glRotatef(yrot, 0.0f, 1.0f, 0.0f); // Rotate on Y-axis
 
+    //glTranslatef(0.0f, 0.0f, -10.0f);
 
 
     glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
 
     xrot += xspeed; // X-axis rotation
     yrot += yspeed; // Y-axis rotation
+
+    ytran += 0.02f;
 
     drawCube();
 
