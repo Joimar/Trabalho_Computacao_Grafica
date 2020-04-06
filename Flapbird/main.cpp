@@ -1,61 +1,21 @@
-#include <iostream>
-#include "glm/glm.hpp"
-#include <vector>
-#include <GLFW/glfw3.h>
-#include "models.h"
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#include <QApplication>
+#include "glwidget.h"
 
+int main(int argc, char *argv[]) {
+    // Construct a new Qt application
+    QApplication a(argc, argv);
 
-using namespace std;
+    // Check for OpenGL support
+    if (!QGLFormat::hasOpenGL()) {
+        qDebug("Your system does not seem to support OpenGL. Cannot run this example.");
+        return EXIT_FAILURE;
+    }
 
+    // Create and show our OpenGL window
+    GLWidget w;
+    w.setMinimumSize(800, 600);
+    w.show();
 
-
- Models cubo = Models();
-
-
-//void keyCallback( GLFWwindow *window, int key, int scancode, int action, int mods );
-
-
-
-
-int main()
-{
-
-
-
-    GLFWwindow* window;
-
-        /* Initialize the library */
-        if (!glfwInit())
-            return -1;
-
-        /* Create a windowed mode window and its OpenGL context */
-        window = glfwCreateWindow(640, 480, "FlapBird 3D", NULL, NULL);
-        if (!window)
-        {
-            glfwTerminate();
-            return -1;
-        }
-
-        /* Make the window's context current */
-            glfwMakeContextCurrent(window);
-
-            /* Loop until the user closes the window */
-            while (!glfwWindowShouldClose(window))
-            {
-                /* Render here */
-                glClear(GL_COLOR_BUFFER_BIT);
-               cubo.drawCube();
-
-
-                /* Swap front and back buffers */
-                glfwSwapBuffers(window);
-
-                /* Poll for and process events */
-                glfwPollEvents();
-            }
-
-            glfwTerminate();
-    return 0;
+    // Let's roll!
+    return a.exec();
 }

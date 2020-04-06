@@ -14,10 +14,10 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_QML_DEBUG
-CFLAGS        = -pipe -g -Wall -W -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I../Flapbird -I. -I/home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++
+DEFINES       = -DQT_QML_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+INCPATH       = -I../Flapbird -I. -I/home/joi/Qt/5.12.6/gcc_64/include -I/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL -I/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets -I/home/joi/Qt/5.12.6/gcc_64/include/QtGui -I/home/joi/Qt/5.12.6/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I/home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/joi/Qt/5.12.6/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -39,8 +39,8 @@ COMPRESS      = gzip -9f
 DISTNAME      = Flapbird1.0.0
 DISTDIR = /home/joi/Área\ de\ Trabalho/Computação\ Gráfica/Atividades/Trabalho_Computacao_Grafica/build-Flapbird-Desktop-Debug/.tmp/Flapbird1.0.0
 LINK          = g++
-LFLAGS        = 
-LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libglut.so -lGL -lGLU -lglfw   
+LFLAGS        = -Wl,-rpath,/home/joi/Qt/5.12.6/gcc_64/lib
+LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libglut.so -lGLU -lglfw /home/joi/Qt/5.12.6/gcc_64/lib/libQt5OpenGL.so /home/joi/Qt/5.12.6/gcc_64/lib/libQt5Widgets.so /home/joi/Qt/5.12.6/gcc_64/lib/libQt5Gui.so /home/joi/Qt/5.12.6/gcc_64/lib/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -53,13 +53,18 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Flapbird/fase1.cpp \
+		../Flapbird/glwidget.cpp \
 		../Flapbird/loadobj.cpp \
 		../Flapbird/main.cpp \
-		../Flapbird/models.cpp 
+		../Flapbird/models.cpp qrc_res.cpp \
+		moc_glwidget.cpp
 OBJECTS       = fase1.o \
+		glwidget.o \
 		loadobj.o \
 		main.o \
-		models.o
+		models.o \
+		qrc_res.o \
+		moc_glwidget.o
 DIST          = /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/common/unix.conf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/common/linux.conf \
@@ -221,15 +226,23 @@ DIST          = /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/default_post.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qml_debug.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/warn_on.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qt.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/resources.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/moc.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/unix/opengl.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/uic.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/unix/thread.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qmake_use.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/file_copies.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/testcase_targets.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/exceptions.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/yacc.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/lex.prf \
-		../Flapbird/Flapbird.pro fase1.h \
-		loadobj.h \
-		models.h ../Flapbird/fase1.cpp \
+		../Flapbird/Flapbird.pro ../Flapbird/fase1.h \
+		../Flapbird/glwidget.h \
+		../Flapbird/loadobj.h \
+		../Flapbird/models.h ../Flapbird/fase1.cpp \
+		../Flapbird/glwidget.cpp \
 		../Flapbird/loadobj.cpp \
 		../Flapbird/main.cpp \
 		../Flapbird/models.cpp
@@ -405,13 +418,20 @@ Makefile: ../Flapbird/Flapbird.pro /home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++/
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/default_post.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qml_debug.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/warn_on.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qt.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/resources.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/moc.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/unix/opengl.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/uic.prf \
+		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/unix/thread.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qmake_use.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/file_copies.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/testcase_targets.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/exceptions.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/yacc.prf \
 		/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/lex.prf \
-		../Flapbird/Flapbird.pro
+		../Flapbird/Flapbird.pro \
+		../Flapbird/res.qrc
 	$(QMAKE) -o Makefile ../Flapbird/Flapbird.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/spec_pre.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/common/unix.conf:
@@ -574,6 +594,12 @@ Makefile: ../Flapbird/Flapbird.pro /home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++/
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/default_post.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qml_debug.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/warn_on.prf:
+/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qt.prf:
+/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/resources.prf:
+/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/moc.prf:
+/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/unix/opengl.prf:
+/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/uic.prf:
+/home/joi/Qt/5.12.6/gcc_64/mkspecs/features/unix/thread.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/qmake_use.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/file_copies.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/testcase_targets.prf:
@@ -581,6 +607,7 @@ Makefile: ../Flapbird/Flapbird.pro /home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++/
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/yacc.prf:
 /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/lex.prf:
 ../Flapbird/Flapbird.pro:
+../Flapbird/res.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../Flapbird/Flapbird.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 
@@ -595,6 +622,10 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../Flapbird/res.qrc $(DISTDIR)/
+	$(COPY_FILE) --parents /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Flapbird/fase1.h ../Flapbird/glwidget.h ../Flapbird/loadobj.h ../Flapbird/models.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Flapbird/fase1.cpp ../Flapbird/glwidget.cpp ../Flapbird/loadobj.cpp ../Flapbird/main.cpp ../Flapbird/models.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -610,31 +641,441 @@ distclean: clean
 
 ####### Sub-libraries
 
+mocclean: compiler_moc_header_clean compiler_moc_objc_header_clean compiler_moc_source_clean
+
+mocables: compiler_moc_header_make_all compiler_moc_objc_header_make_all compiler_moc_source_make_all
+
 check: first
 
 benchmark: first
 
+compiler_rcc_make_all: qrc_res.cpp
+compiler_rcc_clean:
+	-$(DEL_FILE) qrc_res.cpp
+qrc_res.cpp: ../Flapbird/res.qrc \
+		/home/joi/Qt/5.12.6/gcc_64/bin/rcc \
+		../Flapbird/Crate.bmp
+	/home/joi/Qt/5.12.6/gcc_64/bin/rcc -name res ../Flapbird/res.qrc -o qrc_res.cpp
+
+compiler_moc_predefs_make_all: moc_predefs.h
+compiler_moc_predefs_clean:
+	-$(DEL_FILE) moc_predefs.h
+moc_predefs.h: /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/data/dummy.cpp
+	g++ -pipe -g -Wall -W -dM -E -o moc_predefs.h /home/joi/Qt/5.12.6/gcc_64/mkspecs/features/data/dummy.cpp
+
+compiler_moc_header_make_all: moc_glwidget.cpp
+compiler_moc_header_clean:
+	-$(DEL_FILE) moc_glwidget.cpp
+moc_glwidget.cpp: ../Flapbird/glwidget.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/QGLWidget \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qgl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopengl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qconfig.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtcore-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsysinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlogging.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qflags.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmutex.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qnumeric.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qversiontagging.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtgui-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qt_windows.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopengles2ext.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopenglext.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qwidget.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qnamespace.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobject.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstring.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qchar.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbytearray.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qrefcount.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qarraydata.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringliteral.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringview.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qalgorithms.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qiterator.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qpair.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringlist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qregexp.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcoreevent.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmetatype.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobject_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmargins.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qrect.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsize.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qpoint.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpalette.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qcolor.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qrgb.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qrgba64.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qbrush.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvector.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qmatrix.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpolygon.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qregion.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdatastream.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qiodevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qline.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtransform.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpainterpath.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qimage.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpixelformat.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpixmap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qshareddata.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qhash.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfont.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfontinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qcursor.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qkeysequence.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qevent.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvariant.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdebug.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtextstream.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlocale.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qset.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qurl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qurlquery.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qfile.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qfiledevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qvector2d.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpaintengine.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpainter.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtextoption.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpen.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qglcolormap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qtopenglglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/QSurfaceFormat \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/QTime \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdatetime.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/QHash \
+		moc_predefs.h \
+		/home/joi/Qt/5.12.6/gcc_64/bin/moc
+	/home/joi/Qt/5.12.6/gcc_64/bin/moc $(DEFINES) --include '/home/joi/Área de Trabalho/Computação Gráfica/Atividades/Trabalho_Computacao_Grafica/build-Flapbird-Desktop-Debug/moc_predefs.h' -I/home/joi/Qt/5.12.6/gcc_64/mkspecs/linux-g++ -I'/home/joi/Área de Trabalho/Computação Gráfica/Atividades/Trabalho_Computacao_Grafica/Flapbird' -I/home/joi/Qt/5.12.6/gcc_64/include -I/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL -I/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets -I/home/joi/Qt/5.12.6/gcc_64/include/QtGui -I/home/joi/Qt/5.12.6/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Flapbird/glwidget.h -o moc_glwidget.cpp
+
+compiler_moc_objc_header_make_all:
+compiler_moc_objc_header_clean:
+compiler_moc_source_make_all:
+compiler_moc_source_clean:
+compiler_uic_make_all:
+compiler_uic_clean:
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
 fase1.o: ../Flapbird/fase1.cpp ../Flapbird/fase1.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fase1.o ../Flapbird/fase1.cpp
 
+glwidget.o: ../Flapbird/glwidget.cpp ../Flapbird/glwidget.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/QGLWidget \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qgl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopengl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qconfig.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtcore-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsysinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlogging.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qflags.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmutex.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qnumeric.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qversiontagging.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtgui-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qt_windows.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopengles2ext.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopenglext.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qwidget.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qnamespace.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobject.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstring.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qchar.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbytearray.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qrefcount.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qarraydata.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringliteral.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringview.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qalgorithms.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qiterator.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qpair.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringlist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qregexp.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcoreevent.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmetatype.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobject_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmargins.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qrect.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsize.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qpoint.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpalette.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qcolor.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qrgb.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qrgba64.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qbrush.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvector.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qmatrix.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpolygon.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qregion.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdatastream.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qiodevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qline.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtransform.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpainterpath.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qimage.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpixelformat.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpixmap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qshareddata.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qhash.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfont.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfontinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qcursor.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qkeysequence.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qevent.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvariant.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdebug.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtextstream.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlocale.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qset.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qurl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qurlquery.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qfile.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qfiledevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qvector2d.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpaintengine.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpainter.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtextoption.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpen.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qglcolormap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qtopenglglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/QSurfaceFormat \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/QTime \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdatetime.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/QHash \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/QKeyEvent \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/QTimer \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtimer.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbasictimer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o glwidget.o ../Flapbird/glwidget.cpp
+
 loadobj.o: ../Flapbird/loadobj.cpp ../Flapbird/loadobj.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loadobj.o ../Flapbird/loadobj.cpp
 
-main.o: ../Flapbird/main.cpp ../Flapbird/models.h
+main.o: ../Flapbird/main.cpp /home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/QApplication \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qapplication.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qconfig.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtcore-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsysinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlogging.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qflags.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmutex.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qnumeric.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qversiontagging.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtgui-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstring.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qchar.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbytearray.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qrefcount.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qnamespace.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qarraydata.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringliteral.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringview.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobject.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qalgorithms.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qiterator.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qpair.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringlist.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qregexp.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcoreevent.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmetatype.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qobject_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qeventloop.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qpoint.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsize.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qcursor.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qwidget.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmargins.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qrect.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpalette.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qcolor.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qrgb.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qrgba64.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qbrush.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvector.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qmatrix.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpolygon.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qregion.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdatastream.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qiodevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qline.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtransform.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpainterpath.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qimage.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpixelformat.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpixmap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qshareddata.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qhash.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfont.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qfontinfo.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qkeysequence.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qevent.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qvariant.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qmap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdebug.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qtextstream.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qlocale.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qset.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qurl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qurlquery.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qfile.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qfiledevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qvector2d.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qguiapplication.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qinputmethod.h \
+		../Flapbird/glwidget.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/QGLWidget \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qgl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopengl.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qt_windows.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopengles2ext.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qopenglext.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpaintengine.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpainter.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qtextoption.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qpen.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qglcolormap.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtOpenGL/qtopenglglobal.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/QSurfaceFormat \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/QTime \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/qdatetime.h \
+		/home/joi/Qt/5.12.6/gcc_64/include/QtCore/QHash \
+		../Flapbird/models.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Flapbird/main.cpp
 
 models.o: ../Flapbird/models.cpp ../Flapbird/models.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o models.o ../Flapbird/models.cpp
+
+qrc_res.o: qrc_res.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_res.o qrc_res.cpp
+
+moc_glwidget.o: moc_glwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_glwidget.o moc_glwidget.cpp
 
 ####### Install
 
