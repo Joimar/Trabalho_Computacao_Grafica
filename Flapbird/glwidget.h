@@ -38,7 +38,7 @@ private:
     QTimer *timer;
     QTime time;
     GLuint filter, texture[4];
-    GLfloat xrot, yrot, xspeed, yspeed, z, ytran;
+    GLfloat xrot, yrot, xspeed, yspeed, z, xtran;
     bool lightChanged, filterChanged;
     int changeAmount;
 };

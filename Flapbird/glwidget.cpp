@@ -26,7 +26,7 @@ GLWidget::GLWidget() {
     changeAmount = 0;
     xrot = yrot = xspeed = yspeed = 0.0f;
     z = -5.0f;
-   ytran = 0.0f;
+    xtran = 0.0f;
 }
 
 // Destructor
@@ -112,6 +112,8 @@ void GLWidget::resizeGL(int width, int height) {
     glMatrixMode(GL_MODELVIEW); // Select modelview matrix
     glLoadIdentity(); // Reset modelview matrix
 }
+
+
 
 // Draw a cube using OpenGL
 void GLWidget::drawCube() {
@@ -269,7 +271,7 @@ void GLWidget::paintGL() {
     glLoadIdentity(); // Reset current modelview matrix
     //glTranslatef(0.0f, 0.0f, z); // Move into the screen faz a camera ficar fora e não dentro do objeto
     //glTranslatef(0.0f, 0.0f, -10.0f); // Move into the screen faz a camera ficar fora e não dentro do objeto
-    glTranslatef(ytran, 0.0f, -10.0f); // ytran faz ele andar para a direita
+    glTranslatef(xtran, 0.0f, -10.0f); // ytran faz ele andar para a direita
     glRotatef(xrot, 1.0f, 0.0f, 0.0f); // Rotate on X-axis
     glRotatef(yrot, 0.0f, 1.0f, 0.0f); // Rotate on Y-axis
 
@@ -281,7 +283,7 @@ void GLWidget::paintGL() {
     xrot += xspeed; // X-axis rotation
     yrot += yspeed; // Y-axis rotation
 
-    ytran += 0.02f;
+    xtran += 0.02f;
 
     drawCube();
 
@@ -293,6 +295,11 @@ void GLWidget::paintGL() {
 
     // Show message when an enabled OpenGL feature has changed
     glLoadIdentity();
+
+    glTranslatef(0.0f, 0.0f, -10.0f);
+    drawRoof();
+    glLoadIdentity();
+
     if ((lightChanged || filterChanged) && changeAmount > 0) {
         QString str;
         if (filterChanged)
@@ -362,6 +369,9 @@ void GLWidget::keyPressEvent(QKeyEvent *event) {
         break;
     case Qt::Key_Right:
         yspeed += 0.02f;
+        break;
+    case Qt::Key_Space:
+        xtran = 0.0f;
         break;
     default:
         QGLWidget::keyPressEvent(event); // Let base class handle the other keys
