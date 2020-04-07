@@ -12,6 +12,9 @@
 #include <QGLWidget>
 #include <QTime>
 #include <QHash>
+#include <GL/glut.h>
+
+#include <stdlib.h>
 
 class QTimer;
 
@@ -31,6 +34,7 @@ protected:
 
 private:
     void drawCube();
+    void drawEnemy();
     void drawRoof();
     void drawDoor();
     void drawWindow();
@@ -38,7 +42,7 @@ private:
     QTimer *timer;
     QTime time;
     GLuint filter, texture[4];
-    GLfloat xrot, yrot, xspeed, yspeed, z, xtran;
+    GLfloat xrot, yrot, xspeed, yspeed, z, xtran, ytran, xinimigo;
     bool lightChanged, filterChanged;
     int changeAmount;
 };

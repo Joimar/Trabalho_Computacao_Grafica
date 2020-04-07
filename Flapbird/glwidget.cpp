@@ -5,13 +5,15 @@
  * Contact Jeff through his website: http://nehe.gamedev.net/
  * Contact Wesley for port-specific comments: wesley@ubuntu.com
  */
-
+#include <GL/glut.h>
 #include "glwidget.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <QKeyEvent>
 #include <QTimer>
 #include <string>
+
+#include <stdlib.h>
 
 using std::string;
 // Constructor
@@ -27,6 +29,8 @@ GLWidget::GLWidget() {
     xrot = yrot = xspeed = yspeed = 0.0f;
     z = -5.0f;
     xtran = 0.0f;
+
+    xinimigo = 50.0f;
 }
 
 // Destructor
@@ -56,8 +60,9 @@ void GLWidget::initializeGL() {
     QImage imgTelhado = convertToGLFormat(QImage("../Flapbird/roof4.jpg"));
     QImage imgJanela = convertToGLFormat(QImage("../Flapbird/window.bmp"));
     QImage imgPorta = convertToGLFormat(QImage("../Flapbird/door.bmp"));
+    QImage imgCano = convertToGLFormat(QImage("../Flapbird/verde_abacate.jpg"));
 
-    glGenTextures(4, texture);
+    glGenTextures(5, texture);
 
     // Texture da Parede
     glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -82,6 +87,12 @@ void GLWidget::initializeGL() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     gluBuild2DMipmaps(GL_TEXTURE_2D, 3, imgPorta.width(), imgPorta.height(), GL_RGBA, GL_UNSIGNED_BYTE, imgPorta.bits());
+
+    //Textura do Cano
+    glBindTexture(GL_TEXTURE_2D, texture[4]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, imgCano.width(), imgCano.height(), GL_RGBA, GL_UNSIGNED_BYTE, imgCano.bits());
 
     // Set up lighting
     GLfloat ambLight[] = {0.3f, 0.3f, 0.3f, 1.0f};
@@ -113,6 +124,66 @@ void GLWidget::resizeGL(int width, int height) {
     glLoadIdentity(); // Reset modelview matrix
 }
 
+void GLWidget::drawEnemy()
+{
+    //glBindTexture(GL_TEXTURE_2D, 0);
+   // glDisable(GL_TEXTURE_2D);
+   // glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture[4]);
+    glBegin(GL_QUADS);
+
+   glColor3f(1.0f,1.0f,0.0f);
+        // Front Face
+        glNormal3f(0.0f, 0.0f, 1.0f);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, 1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, 4.0f, 1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 4.0f, 1.0f); // Top Left Of The Texture and Quad
+
+        glColor3f(1.0f,1.0f,0.0f);
+        // Back Face
+        glNormal3f(0.0f, 0.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 4.0f, -1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, 4.0f, -1.0f); // Top Left Of The Texture and Quad
+        glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f); // Bottom Left Of The Texture and Quad
+
+        glColor3f(1.0f,1.0f,0.0f);
+        // Top Face
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f); // Top Left Of The Texture and Quad
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 1.0f); // Bottom Left Of The Texture and Quad
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, 1.0f, 1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, 1.0f, -1.0f); // Top Right Of The Texture and Quad
+
+        glColor3f(1.0f,1.0f,0.0f);
+        // Bottom Face
+        glNormal3f(0.0f, -1.0f, 0.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, -1.0f, -1.0f); // Top Left Of The Texture and Quad
+        glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
+        glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f); // Bottom Right Of The Texture and Quad
+
+        glColor3f(1.0f,1.0f,0.0f);
+        // Right face
+        glNormal3f(1.0f, 0.0f, 0.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, 4.0f, -1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, 4.0f, 1.0f); // Top Left Of The Texture and Quad
+        glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
+
+        glColor3f(1.0f,1.0f,0.0f);
+        // Left Face
+        glNormal3f(-1.0f, 0.0f, 0.0f);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f); // Bottom Left Of The Texture and Quad
+        glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 4.0f, 1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 4.0f, -1.0f); // Top Left Of The Texture and Quad
+
+
+    glEnd();
+
+}
 
 
 // Draw a cube using OpenGL
@@ -267,23 +338,31 @@ void GLWidget::drawWindow()
 void GLWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear screen and depth buffer
 
+
+
     // Draw cube
     glLoadIdentity(); // Reset current modelview matrix
     //glTranslatef(0.0f, 0.0f, z); // Move into the screen faz a camera ficar fora e não dentro do objeto
     //glTranslatef(0.0f, 0.0f, -10.0f); // Move into the screen faz a camera ficar fora e não dentro do objeto
-    glTranslatef(xtran, 0.0f, -10.0f); // ytran faz ele andar para a direita
+    glTranslatef(xtran, 0.0f, -20.0f); // ytran faz ele andar para a direita
     glRotatef(xrot, 1.0f, 0.0f, 0.0f); // Rotate on X-axis
     glRotatef(yrot, 0.0f, 1.0f, 0.0f); // Rotate on Y-axis
 
+  //  gluLookAt(xtran, 0.0f, 10.0f, 0.0f, 0.0f, -8.0, 0.0f, 1.0f, 0.0f);
+
     //glTranslatef(0.0f, 0.0f, -10.0f);
 
+  // gluLookAt(xtran, 0.0f, 0.0f, xtran, 0.0f, -10.0, 0.0f, 1.0f, 0.0f); //Envolve o uso da câmera
 
     glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
+
+
+
 
     xrot += xspeed; // X-axis rotation
     yrot += yspeed; // Y-axis rotation
 
-    xtran += 0.02f;
+    //xtran += 0.02f;
 
     drawCube();
 
@@ -294,11 +373,26 @@ void GLWidget::paintGL() {
     drawWindow();
 
     // Show message when an enabled OpenGL feature has changed
+
+    //Outro objeto
     glLoadIdentity();
 
-    glTranslatef(0.0f, 0.0f, -10.0f);
+
+
+    glTranslatef(xinimigo, 0.0f, -20.0f);
     drawRoof();
+    drawEnemy();
+    xinimigo -= 0.05f;
     glLoadIdentity();
+
+//    //Camera acompanha
+
+ //gluLookAt(xtran, 0.0f, 0.0f, 0.0f, 0.0f, -10.0, 0.0f, 1.0f, 0.0f); //Envolve o uso da câmera
+
+//    gluLookAt(xtran, 0.0f, 10.0f, xtran, 0.0f, 80.0, 0.0f, 1.0f, 0.0f);
+
+
+
 
     if ((lightChanged || filterChanged) && changeAmount > 0) {
         QString str;
