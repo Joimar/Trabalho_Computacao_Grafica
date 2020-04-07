@@ -41,7 +41,7 @@ private:
     void textureRoof();
     QTimer *timer;
     QTime time;
-    GLuint filter, texture[4];
+    GLuint filter, texture[5];
     GLfloat xrot, yrot, xspeed, yspeed, z, xtran, ytran, xinimigo;
     bool lightChanged, filterChanged;
     int changeAmount;
