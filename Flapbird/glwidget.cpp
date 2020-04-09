@@ -414,7 +414,7 @@ void GLWidget::paintGL() {
 //        xinimigo = 40.0f;
 //    }
 
-    if(frontalCollision(-1.0f, 1.0f, -1.0f, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
+    if(frontalCollision(-1.0f, 2.0f, -1.0f, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
     {
         xinimigo = 40.0f;
     }
