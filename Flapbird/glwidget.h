@@ -41,6 +41,7 @@ private:
     void textureRoof();
     bool frontalCollision(GLfloat birdX1, GLfloat birdX2, GLfloat birdY2, GLfloat canoX1, GLfloat canoX2, GLfloat canoY1, GLfloat canoY2);
     bool verticalCollision(GLfloat birdY1, GLfloat birdY2, GLfloat canoY1, GLfloat canoY2);
+    void drawPipe(GLfloat distancia, GLfloat altura);
     QTimer *timer;
     QTime time;
     GLuint filter, texture[5];

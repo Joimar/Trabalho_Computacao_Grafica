@@ -182,6 +182,61 @@ void GLWidget::drawEnemy()
 
 }
 
+
+void GLWidget::drawPipe(GLfloat distancia, GLfloat altura)
+{
+
+    glBindTexture(GL_TEXTURE_2D, texture[4]);
+    glBegin(GL_QUADS);
+
+
+        // Front Face
+        glNormal3f(0.0f, 0.0f, 1.0f);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f + distancia, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f + distancia, -1.0f, 1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f + distancia, altura, 1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f + distancia, altura, 1.0f); // Top Left Of The Texture and Quad
+
+        // Back Face
+        glNormal3f(0.0f, 0.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f + distancia, -1.0f, -1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f + distancia, altura, -1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f + distancia, altura, -1.0f); // Top Left Of The Texture and Quad
+        glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f + distancia, -1.0f, -1.0f); // Bottom Left Of The Texture and Quad
+
+        // Top Face
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f + distancia, 1.0f, -1.0f); // Top Left Of The Texture and Quad
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f + distancia, 1.0f, 1.0f); // Bottom Left Of The Texture and Quad
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f + distancia, 1.0f, 1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f + distancia, 1.0f, -1.0f); // Top Right Of The Texture and Quad
+
+        // Bottom Face
+        glNormal3f(0.0f, -1.0f, 0.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f + distancia, -1.0f, -1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f + distancia, -1.0f, -1.0f); // Top Left Of The Texture and Quad
+        glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f + distancia, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
+        glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f + distancia, -1.0f, 1.0f); // Bottom Right Of The Texture and Quad
+
+        // Right face
+        glNormal3f(1.0f, 0.0f, 0.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f + distancia, -1.0f, -1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f + distancia, altura, -1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f + distancia, altura, 1.0f); // Top Left Of The Texture and Quad
+        glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f + distancia, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
+
+        // Left Face
+        glNormal3f(-1.0f, 0.0f, 0.0f);
+        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f + distancia, -1.0f, -1.0f); // Bottom Left Of The Texture and Quad
+        glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f + distancia, -1.0f, 1.0f); // Bottom Right Of The Texture and Quad
+        glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f + distancia, altura, 1.0f); // Top Right Of The Texture and Quad
+        glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f + distancia, altura, -1.0f); // Top Left Of The Texture and Quad
+
+
+    glEnd();
+
+}
+
 bool GLWidget::frontalCollision(GLfloat birdX1, GLfloat birdX2, GLfloat birdY2, GLfloat canoX1, GLfloat canoX2, GLfloat canoY1, GLfloat canoY2)
 {
 //    GLfloat GLbirdX1, GLbirdy1, GLbirdX2, GLbirdY2, GLcanoX1, GLcanoY1, GLcanoX2, GLcanoY2;
@@ -289,6 +344,7 @@ void GLWidget::drawCube() {
     glEnd();
 }
 
+//void GLWidget::drawRoof(){}
 
 
 void GLWidget::drawRoof()
@@ -416,14 +472,15 @@ void GLWidget::paintGL() {
 
 
     glTranslatef(xinimigo, 0.0f, -20.0f);
-    drawRoof();
-    drawEnemy();
-    xinimigo -= 0.05f;
+    //drawRoof();
+    //drawEnemy();
+    drawPipe(xinimigo, 8);
+    xinimigo -= 0.02f;
     glLoadIdentity();
 
 
 
-    if(frontalCollision(-1.0f, 2.0f, -1.0f + ytran, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
+    if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
     {
         xinimigo = 40.0f;
     }
