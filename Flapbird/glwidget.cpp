@@ -31,8 +31,10 @@ GLWidget::GLWidget() {
     xrot = yrot = xspeed = yspeed = 0.0f;
     z = -5.0f;
 
-    xinimigo = 50.0f;
-    ytran = 0.0f;
+    xinimigo = 20.0f; //distancia
+    ytran = 4.0f;
+
+    perdeu = false;
 }
 
 // Destructor
@@ -237,7 +239,7 @@ void GLWidget::drawPipe(GLfloat distancia, GLfloat altura)
 
     if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, distancia, 1.0f + distancia, altura, -1.0f))
     {
-        xinimigo = 40.0f;//fazer condição de perda
+        xinimigo = 20.0f;//fazer condição de perda
     }
 
 }
@@ -479,7 +481,17 @@ void GLWidget::paintGL() {
     glTranslatef(xinimigo, 0.0f, -20.0f);
     //drawRoof();
     //drawEnemy();
-    drawPipe(xinimigo, 8);
+
+    //Fase--------
+     drawPipe(xinimigo, 4);
+     drawPipe(xinimigo+5, 5);
+     drawPipe(xinimigo+8, 5);
+     drawPipe(xinimigo+13, 3);
+     drawPipe(xinimigo+21, 5);
+     drawPipe(xinimigo+25, 6);
+    //-----------
+
+
     xinimigo -= 0.02f;
     glLoadIdentity();
 
@@ -489,8 +501,6 @@ void GLWidget::paintGL() {
 //    {
 //        xinimigo = 40.0f;
 //    }
-
-
 
 
 

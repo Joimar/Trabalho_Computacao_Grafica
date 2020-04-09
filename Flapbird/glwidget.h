@@ -46,7 +46,7 @@ private:
     QTime time;
     GLuint filter, texture[5];
     GLfloat xrot, yrot, xspeed, yspeed, z, xinimigo, ytran;
-    bool lightChanged, filterChanged;
+    bool lightChanged, filterChanged, perdeu;
     int changeAmount;
 };
 
