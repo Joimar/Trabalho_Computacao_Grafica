@@ -396,146 +396,9 @@ void GLWidget::drawCube() {
         glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f); // Top Left Of The Texture and Quad
         glEnd();
 
-//    //parede frontal
-//    glBegin(GL_POLYGON);
-//        glNormal3f(0.0f, 0.0f, -1.0f);
-//        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, -1.0f); // Bottom Left Of The Texture and Quad
-//        glTexCoord2f(0.5f, 1.0f); glVertex3f( 0.1f, 2.0f, -1.0f); //bottom contral
-//        glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, -1.0f);// Bottom of Right
-//    glEnd();
-//    //parede traseira
-//    glBegin(GL_POLYGON);
-//        glNormal3f(0.0f, 0.0f, 1.0f);
-//        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 1.0f); // Bottom Left Of The Texture and Quad
-//        glTexCoord2f(0.5f, 1.0f); glVertex3f( 0.1f, 2.0f, 1.0f); //bottom left
-//        glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 1.0f);// Bottom of Right
-//    glEnd();
-}
-
-void GLWidget::drawFish()
-{glBindTexture(GL_TEXTURE_2D, texture[0]);
-    glBegin(GL_POLYGON);				// draw body
-        glColor3f(0.0,1.0,0.0);
-        glVertex2i(40,200);
-        glVertex2i(120,280);
-        glVertex2i(320,200);
-        glVertex2i(100,160);
-        glEnd();
-
-        glPushMatrix();
-
-        glBegin(GL_POLYGON);			//draw tail
-        glColor3f(0.0,1.0,0.0);
-        glVertex2i(320,200);
-        glVertex2i(360,240);
-        glVertex2i(340,200);
-        glVertex2i(360,160);
-        glVertex2i(320,200);
-        glEnd();
-
-        glBegin(GL_POLYGON);		 //draw Top Key
-        glColor3f(1.0,0.0,0.0);
-        glVertex2i(120,280);
-        glVertex2i(140,300);
-        glVertex2i(280,216);
-        glVertex2i(120,280);
-        glEnd();
-
-        glBegin(GL_POLYGON);		 //draw Buttom Key
-        glColor3f(1.0,0.0,0.0);
-        glVertex2i(100,160);
-        glVertex2i(140,200);
-        glVertex2i(120,164);
-        glVertex2i(100,160);
-        glEnd();
-        glPopMatrix();
-
-        //glPopMatrix();
-        //glPopMatrix();
-        //glutSwapBuffers();
-        //glFlush();
-}
-//void GLWidget::drawRoof(){}
-
-
-void GLWidget::drawRoof()
-{
-    glBindTexture(GL_TEXTURE_2D, texture[1]);
-
-    //qglColor(Qt::white);
-    // Telha esquerda
-    glBegin(GL_POLYGON);
-
-        glNormal3f(0.0f, 1.0f, 0.0f);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, -1.0f); // Top Left Of The Texture and Quad
-        glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 1.0f); // Bottom Left Of The Texture and Quad
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.1f, 2.0f, 1.0f); // Bottom Right Of The Texture and Quad
-        glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.1f, 2.0f, -1.0f); // Top Right Of The Texture and Quad
-    glEnd();
-    //telha direita
-    glBegin(GL_POLYGON);
-        //glNormal3f(0.0f, 1.0f, 0.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.1f, 2.0f, -1.0f);  //Top of Left
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.1f, 2.0f, 1.0f); //bottom left
-        glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 1.0f);// Bottom of Right
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, 1.0f, -1.0f);//telha direita Top of Right
-    glEnd();
 
 }
 
-void GLWidget::drawDoor()
-{
-    glBindTexture(GL_TEXTURE_2D, texture[3]);
-    glBegin(GL_QUADS);
-        glNormal3f(0.0f, 0.0f, 1.0f);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.25f, -0.95f, 1.01f); // Bottom Left Of The Texture and Quad
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.2f, -0.95f, 1.01f); // Bottom Right Of The Texture and Quad
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.2f, 0.1f, 1.01f); // Top Right Of The Texture and Quad
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.25f, 0.1f, 1.01f); // Top Left Of The Texture and Quad
-    glEnd();
-
-}
-
-void GLWidget::drawWindow()
-{
-    glBindTexture(GL_TEXTURE_2D, texture[2]);
-    //Janela frontal direita
-    glBegin(GL_QUADS);
-        glNormal3f(0.0f, 0.0f, 1.0f);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(0.5f, -0.5f, 1.01f); // Bottom Left Of The Texture and Quad
-        glTexCoord2f(1.0f, 0.0f); glVertex3f( 0.9f, -0.5f, 1.01f); // Bottom Right Of The Texture and Quad
-        glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.9f, 0.1f, 1.01f); // Top Right Of The Texture and Quad
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(0.5f, 0.1f, 1.01f); // Top Left Of The Texture and Quad
-    glEnd();
-
-    //Janela frontal esquerda
-    glBegin(GL_QUADS);
-        glNormal3f(0.0f, 0.0f, 1.0f);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, 1.01f); // Bottom Left Of The Texture and Quad
-        glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.9f, -0.5f, 1.01f); // Bottom Right Of The Texture and Quad
-        glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.9f, 0.1f, 1.01f); // Top Right Of The Texture and Quad
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f, 0.1f, 1.01f); // Top Left Of The Texture and Quad
-    glEnd();
-
-    //Janela lado direito perto da frente
-    glBegin(GL_QUADS);
-        glNormal3f(1.0f, 0.0f, 0.0f);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(1.01f, -0.5f, 0.8f); // Bottom Left Of The Texture and Quad
-        glTexCoord2f(1.0f, 0.0f); glVertex3f(1.01f, -0.5f, 0.2f); // Bottom Right Of The Texture and Quad
-        glTexCoord2f(1.0f, 1.0f); glVertex3f(1.01f, 0.1f, 0.2f); // Top Right Of The Texture and Quad
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(1.01f, 0.1f, 0.8f); // Top Left Of The Texture and Quad
-    glEnd();
-
-    //Janela lado direito perto de trás
-    glBegin(GL_QUADS);
-        glNormal3f(1.0f, 0.0f, 0.0f);
-        glTexCoord2f(0.0f, 0.0f); glVertex3f(1.01f, -0.5f, -0.1f); // Bottom Left Of The Texture and Quad
-        glTexCoord2f(1.0f, 0.0f); glVertex3f(1.01f, -0.5f, -0.8f); // Bottom Right Of The Texture and Quad
-        glTexCoord2f(1.0f, 1.0f); glVertex3f(1.01f, 0.1f, -0.8f); // Top Right Of The Texture and Quad
-        glTexCoord2f(0.0f, 1.0f); glVertex3f(1.01f, 0.1f,  -0.1f); // Top Left Of The Texture and Quad
-    glEnd();
-
-}
 
 // OpenGL painting code goes here
 void GLWidget::paintGL() {
@@ -545,8 +408,7 @@ void GLWidget::paintGL() {
 
     // Draw cube
     glLoadIdentity(); // Reset current modelview matrix
-    //glTranslatef(0.0f, 0.0f, z); // Move into the screen faz a camera ficar fora e não dentro do objeto
-    //glTranslatef(0.0f, 0.0f, -10.0f); // Move into the screen faz a camera ficar fora e não dentro do objeto
+
     glTranslatef(0.0f, ytran, -20.0f); // -20.0f faz ele andar para a direita
     glRotatef(xrot, 1.0f, 0.0f, 0.0f); // Rotate on X-axis
     glRotatef(yrot, 0.0f, 1.0f, 0.0f); // Rotate on Y-axis
@@ -564,13 +426,7 @@ void GLWidget::paintGL() {
 
 
     drawCube();
-    //drawFish();
-    //drawRoof();
 
-    //drawDoor();
-
-    //drawWindow();
-    //cenário
     glLoadIdentity();
     drawCenario();
 
@@ -592,6 +448,8 @@ void GLWidget::paintGL() {
      drawPipe(xinimigo+13, 3);
      drawPipe(xinimigo+21, 5);
      drawPipe(xinimigo+25, 6);
+     drawPipe(xinimigo+28, 6);
+     drawPipe(xinimigo+37, 4);
     //-----------
 
 
