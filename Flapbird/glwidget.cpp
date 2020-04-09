@@ -289,7 +289,7 @@ void GLWidget::drawPipe(GLfloat distancia, GLfloat altura)
 
     glEnd();
 
-    if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, distancia, 1.0f + distancia, altura, -1.0f))
+    if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, distancia, 1.0f + distancia, altura, -20.0f))
     {
         xinimigo = 20.0f;//fazer condição de perda
     }
