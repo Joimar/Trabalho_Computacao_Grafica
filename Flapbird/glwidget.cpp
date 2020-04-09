@@ -235,6 +235,11 @@ void GLWidget::drawPipe(GLfloat distancia, GLfloat altura)
 
     glEnd();
 
+    if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, distancia, 1.0f + distancia, altura, -1.0f))
+    {
+        xinimigo = 40.0f;//fazer condição de perda
+    }
+
 }
 
 bool GLWidget::frontalCollision(GLfloat birdX1, GLfloat birdX2, GLfloat birdY2, GLfloat canoX1, GLfloat canoX2, GLfloat canoY1, GLfloat canoY2)
@@ -480,10 +485,10 @@ void GLWidget::paintGL() {
 
 
 
-    if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
-    {
-        xinimigo = 40.0f;
-    }
+//    if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
+//    {
+//        xinimigo = 40.0f;
+//    }
 
 
 
