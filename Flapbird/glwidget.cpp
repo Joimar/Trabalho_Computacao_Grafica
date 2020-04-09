@@ -132,7 +132,7 @@ void GLWidget::drawEnemy()
     glBindTexture(GL_TEXTURE_2D, texture[4]);
     glBegin(GL_QUADS);
 
-   glColor3f(1.0f,1.0f,0.0f);
+
         // Front Face
         glNormal3f(0.0f, 0.0f, 1.0f);
         glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
@@ -140,7 +140,6 @@ void GLWidget::drawEnemy()
         glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, 4.0f, 1.0f); // Top Right Of The Texture and Quad
         glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 4.0f, 1.0f); // Top Left Of The Texture and Quad
 
-        glColor3f(1.0f,1.0f,0.0f);
         // Back Face
         glNormal3f(0.0f, 0.0f, -1.0f);
         glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f); // Bottom Right Of The Texture and Quad
@@ -148,7 +147,6 @@ void GLWidget::drawEnemy()
         glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, 4.0f, -1.0f); // Top Left Of The Texture and Quad
         glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f); // Bottom Left Of The Texture and Quad
 
-        glColor3f(1.0f,1.0f,0.0f);
         // Top Face
         glNormal3f(0.0f, 1.0f, 0.0f);
         glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f); // Top Left Of The Texture and Quad
@@ -156,7 +154,6 @@ void GLWidget::drawEnemy()
         glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, 1.0f, 1.0f); // Bottom Right Of The Texture and Quad
         glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f, 1.0f, -1.0f); // Top Right Of The Texture and Quad
 
-        glColor3f(1.0f,1.0f,0.0f);
         // Bottom Face
         glNormal3f(0.0f, -1.0f, 0.0f);
         glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f); // Top Right Of The Texture and Quad
@@ -164,7 +161,6 @@ void GLWidget::drawEnemy()
         glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
         glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f); // Bottom Right Of The Texture and Quad
 
-        glColor3f(1.0f,1.0f,0.0f);
         // Right face
         glNormal3f(1.0f, 0.0f, 0.0f);
         glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f); // Bottom Right Of The Texture and Quad
@@ -172,7 +168,6 @@ void GLWidget::drawEnemy()
         glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, 4.0f, 1.0f); // Top Left Of The Texture and Quad
         glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, 1.0f); // Bottom Left Of The Texture and Quad
 
-        glColor3f(1.0f,1.0f,0.0f);
         // Left Face
         glNormal3f(-1.0f, 0.0f, 0.0f);
         glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f); // Bottom Left Of The Texture and Quad
@@ -185,6 +180,35 @@ void GLWidget::drawEnemy()
 
 }
 
+bool GLWidget::frontalCollision(GLfloat birdX1, GLfloat birdX2, GLfloat birdY2, GLfloat canoX1, GLfloat canoX2, GLfloat canoY1, GLfloat canoY2)
+{
+//    GLfloat GLbirdX1, GLbirdy1, GLbirdX2, GLbirdY2, GLcanoX1, GLcanoY1, GLcanoX2, GLcanoY2;
+
+//    GLbirdX1 = birdX1;
+//    GLbirdy1 = birdY1;
+
+//    GLbirdX2 = birdX2;
+//    GLbirdY2 = bird
+
+    if(birdX2 >= canoX1 && birdX2<=canoX2)
+    {
+        if(birdY2 <= canoY1 && birdY2 >= canoY2)
+        {
+            return true;
+        }
+    }
+
+    if(birdX1 >= canoX1 && birdX1 <= canoX2)
+    {
+        if(birdY2 <= canoY1 && birdY2 >= canoY2)
+        {
+            return true;
+        }
+    }
+
+
+    return false;
+}
 
 // Draw a cube using OpenGL
 void GLWidget::drawCube() {
@@ -385,11 +409,16 @@ void GLWidget::paintGL() {
     xinimigo -= 0.05f;
     glLoadIdentity();
 
-//    //Camera acompanha
+//    if(frontalCollision(1.0f, -1.0f, 1.0f, -1.0f, xinimigo, xinimigo + 1.0f, 4.0f, -1.0f))
+//    {
+//        xinimigo = 40.0f;
+//    }
 
- //gluLookAt(xtran, 0.0f, 0.0f, 0.0f, 0.0f, -10.0, 0.0f, 1.0f, 0.0f); //Envolve o uso da câmera
+    if(frontalCollision(-1.0f, 1.0f, -1.0f, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
+    {
+        xinimigo = 40.0f;
+    }
 
-//    gluLookAt(xtran, 0.0f, 10.0f, xtran, 0.0f, 80.0, 0.0f, 1.0f, 0.0f);
 
 
 
