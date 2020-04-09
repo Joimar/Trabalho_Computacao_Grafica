@@ -43,6 +43,7 @@ private:
     bool verticalCollision(GLfloat birdY1, GLfloat birdY2, GLfloat canoY1, GLfloat canoY2);
     void drawPipe(GLfloat distancia, GLfloat altura);
     void drawCenario();
+    void drawFish();
     QTimer *timer;
     QTime time;
     GLuint filter, texture[7];
