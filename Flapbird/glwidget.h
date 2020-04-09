@@ -42,9 +42,10 @@ private:
     bool frontalCollision(GLfloat birdX1, GLfloat birdX2, GLfloat birdY2, GLfloat canoX1, GLfloat canoX2, GLfloat canoY1, GLfloat canoY2);
     bool verticalCollision(GLfloat birdY1, GLfloat birdY2, GLfloat canoY1, GLfloat canoY2);
     void drawPipe(GLfloat distancia, GLfloat altura);
+    void drawCenario();
     QTimer *timer;
     QTime time;
-    GLuint filter, texture[5];
+    GLuint filter, texture[7];
     GLfloat xrot, yrot, xspeed, yspeed, z, xinimigo, ytran;
     bool lightChanged, filterChanged, perdeu;
     int changeAmount;
