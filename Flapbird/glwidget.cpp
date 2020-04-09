@@ -291,7 +291,7 @@ void GLWidget::drawPipe(GLfloat distancia, GLfloat altura)
 
     if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, distancia, 1.0f + distancia, altura, -20.0f))
     {
-        xinimigo = 20.0f;//fazer condição de perda
+       { xinimigo = 20.0f; ytran = 0.0f;}//fazer condição de perda
     }
 
 }
@@ -334,11 +334,6 @@ bool GLWidget::verticalCollision(GLfloat birdY1, GLfloat birdY2, GLfloat canoY1,
 void GLWidget::drawCube() {
     //qglColor(Qt::white);
     //glColor3f(1.0f,1.0f,0.0f);
-
-
-
-
-
 
     //glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
     //glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -458,11 +453,7 @@ void GLWidget::paintGL() {
 
 
 
-//    if(frontalCollision(-1.0f, 1.0f, -1.0f + ytran, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
-//    {
-//        xinimigo = 40.0f;
-//    }
-
+    if(ytran< -8.0f){ xinimigo = 20.0f; ytran=0.0f;}//fazer condição de perda
 
 
     if ((lightChanged || filterChanged) && changeAmount > 0) {
