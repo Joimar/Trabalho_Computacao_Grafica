@@ -453,7 +453,8 @@ void GLWidget::paintGL() {
 
 
 
-    if(ytran< -8.0f){ xinimigo = 20.0f; ytran=0.0f;}//fazer condição de perda
+    if(ytran< -8.0f){ xinimigo = 20.0f; ytran=0.0f;}//fazer condição de perda de queda
+    if(ytran > 8.0f){ xinimigo = 20.0f; ytran=0.0f;}//fazer condição de perda de queda
 
 
     if ((lightChanged || filterChanged) && changeAmount > 0) {
