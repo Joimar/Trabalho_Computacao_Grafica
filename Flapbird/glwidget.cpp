@@ -15,6 +15,8 @@
 
 #include <stdlib.h>
 
+#define gravidade 0.01f
+
 using std::string;
 // Constructor
 GLWidget::GLWidget() {
@@ -28,9 +30,9 @@ GLWidget::GLWidget() {
     changeAmount = 0;
     xrot = yrot = xspeed = yspeed = 0.0f;
     z = -5.0f;
-    xtran = 0.0f;
 
     xinimigo = 50.0f;
+    ytran = 0.0f;
 }
 
 // Destructor
@@ -210,6 +212,16 @@ bool GLWidget::frontalCollision(GLfloat birdX1, GLfloat birdX2, GLfloat birdY2, 
     return false;
 }
 
+bool GLWidget::verticalCollision(GLfloat birdY1, GLfloat birdY2, GLfloat canoY1, GLfloat canoY2)
+{
+    if(birdY1 >= canoY2 && birdY1 <= canoY1) return true;
+    if(birdY2 >= canoY2 && birdY2 <= canoY1) return true;
+
+    return false;
+
+}
+
+
 // Draw a cube using OpenGL
 void GLWidget::drawCube() {
     //qglColor(Qt::white);
@@ -368,15 +380,15 @@ void GLWidget::paintGL() {
     glLoadIdentity(); // Reset current modelview matrix
     //glTranslatef(0.0f, 0.0f, z); // Move into the screen faz a camera ficar fora e não dentro do objeto
     //glTranslatef(0.0f, 0.0f, -10.0f); // Move into the screen faz a camera ficar fora e não dentro do objeto
-    glTranslatef(xtran, 0.0f, -20.0f); // ytran faz ele andar para a direita
+    glTranslatef(0.0f, ytran, -20.0f); // -20.0f faz ele andar para a direita
     glRotatef(xrot, 1.0f, 0.0f, 0.0f); // Rotate on X-axis
     glRotatef(yrot, 0.0f, 1.0f, 0.0f); // Rotate on Y-axis
 
-  //  gluLookAt(xtran, 0.0f, 10.0f, 0.0f, 0.0f, -8.0, 0.0f, 1.0f, 0.0f);
 
-    //glTranslatef(0.0f, 0.0f, -10.0f);
 
-  // gluLookAt(xtran, 0.0f, 0.0f, xtran, 0.0f, -10.0, 0.0f, 1.0f, 0.0f); //Envolve o uso da câmera
+
+
+
 
     glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -386,7 +398,7 @@ void GLWidget::paintGL() {
     xrot += xspeed; // X-axis rotation
     yrot += yspeed; // Y-axis rotation
 
-    //xtran += 0.02f;
+
 
     drawCube();
 
@@ -397,7 +409,7 @@ void GLWidget::paintGL() {
     drawWindow();
 
     // Show message when an enabled OpenGL feature has changed
-
+    ytran = ytran - gravidade;
     //Outro objeto
     glLoadIdentity();
 
@@ -409,12 +421,9 @@ void GLWidget::paintGL() {
     xinimigo -= 0.05f;
     glLoadIdentity();
 
-//    if(frontalCollision(1.0f, -1.0f, 1.0f, -1.0f, xinimigo, xinimigo + 1.0f, 4.0f, -1.0f))
-//    {
-//        xinimigo = 40.0f;
-//    }
 
-    if(frontalCollision(-1.0f, 2.0f, -1.0f, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
+
+    if(frontalCollision(-1.0f, 2.0f, -1.0f + ytran, xinimigo, 1.0f + xinimigo, 4.0f, -1.0f))
     {
         xinimigo = 40.0f;
     }
@@ -494,7 +503,7 @@ void GLWidget::keyPressEvent(QKeyEvent *event) {
         yspeed += 0.02f;
         break;
     case Qt::Key_Space:
-        xtran = 0.0f;
+        ytran += 0.15f;
         break;
     default:
         QGLWidget::keyPressEvent(event); // Let base class handle the other keys

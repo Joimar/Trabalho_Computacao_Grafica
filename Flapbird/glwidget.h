@@ -40,10 +40,11 @@ private:
     void drawWindow();
     void textureRoof();
     bool frontalCollision(GLfloat birdX1, GLfloat birdX2, GLfloat birdY2, GLfloat canoX1, GLfloat canoX2, GLfloat canoY1, GLfloat canoY2);
+    bool verticalCollision(GLfloat birdY1, GLfloat birdY2, GLfloat canoY1, GLfloat canoY2);
     QTimer *timer;
     QTime time;
     GLuint filter, texture[5];
-    GLfloat xrot, yrot, xspeed, yspeed, z, xtran, ytran, xinimigo;
+    GLfloat xrot, yrot, xspeed, yspeed, z, xinimigo, ytran;
     bool lightChanged, filterChanged;
     int changeAmount;
 };
